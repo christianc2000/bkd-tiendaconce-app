@@ -1,0 +1,11 @@
+version: '3.8'
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: christian
+      POSTGRES_PASSWORD: 9821736
+      POSTGRES_DB: tiendaconce-db
+    ports:
+      - 5499:5432

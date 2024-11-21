@@ -1,0 +1,61 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model products {
+  id                 Int            @id @default(autoincrement())
+  cod_prod           String         @unique
+  nombre_prod        String
+  nombre_comun_prod  String
+  descripcion_prod   String
+  precio_venta_prod  Float
+  precio_compra_prod Float
+  foto_prod          String
+  cantidad_prod      Int
+  ids_products       ids_products[]
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+}
+
+model ids_products {
+  id        Int      @id @default(autoincrement())
+  cantidad  Int
+  productId Int
+  product   products @relation(fields: [productId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ventas {
+  id          Int      @id @default(autoincrement())
+  cod_venta   String   @unique
+  total_venta Float
+  fecha_venta DateTime
+  items       items[] // Relación uno a muchos con Item
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model items {
+  id              Int      @id @default(autoincrement())
+  cod_prod        String   @unique
+  nombre_prod     String
+  precio_uni_prod Float
+  cantidad        Int
+  precio_subtot   Float
+  ventaId         Int // Llave foránea
+  venta           ventas   @relation(fields: [ventaId], references: [id]) // Relación con Venta
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
