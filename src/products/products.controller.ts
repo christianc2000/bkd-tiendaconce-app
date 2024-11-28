@@ -19,28 +19,28 @@ import { CreateProductDto } from './dto/create-product.dto';
 export class ProductsController {
   constructor(private productsService: ProductsService) {}
   @Get()
-  getAllProducts() {
-    return this.productsService.getAllProducts();
+  findAll() {
+    return this.productsService.findAll();
   }
 
   @Get('/:id')
-  getProduct(@Param('id') id: number) {
-    return this.productsService.getProduct(id);
+  findOne(@Param('id') id: number) {
+    return this.productsService.findOne(id);
   }
 
   @Post()
-  createTask(@Body() product: CreateProductDto) {
-    return this.productsService.createProduct(product);
+  create(@Body() product: CreateProductDto) {
+    return this.productsService.create(product);
   }
 
   @Put('/:id')
-  updateProduct(@Param('id') id: number, @Body() product: UpdateProductDto) {
-    return this.productsService.updateProduct(id, product);
+  update(@Param('id') id: number, @Body() product: UpdateProductDto) {
+    return this.productsService.update(id, product);
   }
 
   @Delete('/:id')
-  deleteProduct(@Param('id') id:number){
-    return this.productsService.deleteProduct(id);
+  remove(@Param('id') id:number){
+    return this.productsService.remove(id);
   }
 
   @Get('/next/id')

@@ -23,39 +23,43 @@ model products {
   precio_compra_prod Float
   foto_prod          String
   cantidad_prod      Int
-  ids_products       ids_products[]
-  createdAt          DateTime       @default(now())
-  updatedAt          DateTime       @updatedAt
+  createdAt          DateTime       @default(now()) @db.Timestamptz
+  updatedAt          DateTime       @updatedAt @db.Timestamptz
 }
 
 model ids_products {
   id        Int      @id @default(autoincrement())
   cantidad  Int
-  productId Int
-  product   products @relation(fields: [productId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @db.Timestamptz
+  updatedAt DateTime @updatedAt @db.Timestamptz
 }
+
+model ids_ventas {
+  id        Int      @id @default(autoincrement())
+  cantidad  Int
+  createdAt DateTime @default(now()) @db.Timestamptz
+  updatedAt DateTime @updatedAt @db.Timestamptz
+}
+
 
 model ventas {
   id          Int      @id @default(autoincrement())
   cod_venta   String   @unique
   total_venta Float
-  fecha_venta DateTime
   items       items[] // Relación uno a muchos con Item
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now()) @db.Timestamptz
+  updatedAt   DateTime @updatedAt @db.Timestamptz
 }
 
 model items {
   id              Int      @id @default(autoincrement())
-  cod_prod        String   @unique
+  cod_prod        String   
   nombre_prod     String
   precio_uni_prod Float
   cantidad        Int
   precio_subtot   Float
-  ventaId         Int // Llave foránea
-  venta           ventas   @relation(fields: [ventaId], references: [id]) // Relación con Venta
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  venta_id        Int // Llave foránea
+  venta           ventas   @relation(fields: [venta_id], references: [id]) // Relación con Venta
+  createdAt       DateTime @default(now()) @db.Timestamptz
+  updatedAt       DateTime @updatedAt @db.Timestamptz
 }

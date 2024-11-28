@@ -7,5 +7,6 @@ services:
       POSTGRES_USER: christian
       POSTGRES_PASSWORD: 9821736
       POSTGRES_DB: tiendaconce-db
+      TZ: America/La_Paz # Cambia a tu zona horaria
     ports:
       - 5499:5432

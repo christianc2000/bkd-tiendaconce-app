@@ -9,27 +9,38 @@ import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class ProductsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) {}
 
-  getAllProducts() {
+  findAll() {
     return this.prisma.products.findMany();
   }
 
-  getProduct(id: number) {
+  findOne(id: number) {
     const productFound = this.prisma.products.findUnique({
-      where:{
-        id
-      }
+      where: {
+        id,
+      },
     });
 
     if (!productFound) {
-      return new NotFoundException(`¡El producto con id=${id} no fué encontrado!`);
+      throw new NotFoundException(
+        `Producto con ID ${id} no encontrado!`,
+      );
     }
 
     return productFound;
   }
 
-  async createProduct(createProductDto: CreateProductDto) {
+  async getNextId() {
+    // Obtener el registro en ids_products y sumar 1 a la cantidad
+    const idProduct = await this.prisma.ids_products.findFirst();
+
+    return {
+      next_id: idProduct ? idProduct.cantidad + 1 : 1, // Manejar si no existe registro en ids_products
+    };
+  }
+
+  async create(createProductDto: CreateProductDto) {
     // Verificamos si ya existe un producto con el mismo cod_prod
     const existingProduct = await this.prisma.products.findUnique({
       where: {
@@ -42,19 +53,34 @@ export class ProductsService {
       throw new ConflictException('El código de producto ya está en uso');
     }
 
+    const idsProduct = await this.prisma.ids_products.findFirst();
+    if (!idsProduct) {
+      // Si no existe la tabla `ids_products`, crea un registro inicial
+      await this.prisma.ids_products.create({
+        data: {
+          cantidad: 1,
+        },
+      });
+    } else {
+      // Si ya existe, incrementa la cantidad
+      await this.prisma.ids_products.update({
+        where: { id: idsProduct.id },
+        data: { cantidad: { increment: 1 } },
+      });
+    }
     // Si no existe, procedemos a crear el nuevo producto
-    return this.prisma.products.create({
+    return await this.prisma.products.create({
       data: createProductDto,
     });
   }
 
-  async updateProduct(id: number, product: UpdateProductDto) {
+  async update(id: number, product: UpdateProductDto) {
     const existingProduct = await this.prisma.products.findUnique({
       where: { id },
     });
 
     if (!existingProduct) {
-      throw new Error(`Product with ID ${id} not found`);
+      throw new Error(`Producto con ID ${id} no encontrado`);
     }
 
     return await this.prisma.products.update({
@@ -67,13 +93,13 @@ export class ProductsService {
     });
   }
 
-  async deleteProduct(id: number) {
+  async remove(id: number) {
     const existingProduct = await this.prisma.products.findUnique({
       where: { id },
     });
 
     if (!existingProduct) {
-      throw new Error(`Product with ID ${id} not found`);
+      throw new Error(`Producto con ID ${id} no encontrado`);
     }
 
     return await this.prisma.products.delete({
@@ -81,20 +107,5 @@ export class ProductsService {
         id,
       },
     });
-  }
-
-  async getNextId(): Promise<number> {
-    // Obtener el id máximo de la tabla
-    const maxProduct = await this.prisma.products.findFirst({
-      orderBy: {
-        id: 'desc', // Ordena por id de forma descendente
-      },
-      select: {
-        id: true, // Solo selecciona el campo id
-      },
-    });
-
-    // Si no hay registros, el siguiente id será 1
-    return (maxProduct?.id ?? 0) + 1;
   }
 }
