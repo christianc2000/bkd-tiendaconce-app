@@ -26,7 +26,17 @@ export class VentasService {
     let sumaSubtotales = 0;
 
     // Validar lógica de los items
-    createVentaDto.items.forEach((item) => {
+    for (const item of createVentaDto.items) {
+      // Verificar si el producto existe en la tabla productos
+      const producto = await this.prisma.products.findUnique({
+        where: { cod_prod: item.cod_prod },
+      });
+      if (!producto) {
+        throw new BadRequestException(
+          `El producto con código ${item.cod_prod} no existe.`,
+        );
+      }
+  
       if (item.cantidad <= 0) {
         throw new BadRequestException(
           `La cantidad del producto ${item.cod_prod} debe ser mayor a 0.`,
@@ -37,9 +47,10 @@ export class VentasService {
           `El subtotal del producto ${item.cod_prod} es incorrecto.`,
         );
       }
+  
       // Sumar el subtotal del item para validar el total
       sumaSubtotales += item.precio_subtot;
-    });
+    }
 
     // Validar que el total_venta sea igual a la suma de los subtotales
     if (createVentaDto.total_venta !== sumaSubtotales) {

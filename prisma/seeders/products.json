@@ -1,0 +1,52 @@
+[
+    {
+      "cod_prod": "P00001",
+      "nombre_prod": "Piñata colorida",
+      "nombre_comun_prod": "Piñata",
+      "descripcion_prod": "Piñata de carton en forma de pelotas con puntas",
+      "precio_venta_prod": 35,
+      "precio_compra_prod": 20,
+      "foto_prod": "./src/img-productos/prod001.jpg",
+      "cantidad_prod": 100
+    },
+    {
+      "cod_prod": "P00002",
+      "nombre_prod": "Goma eva sin brillo",
+      "nombre_comun_prod": "Goma eva",
+      "descripcion_prod": "Goma eva sin brillo pliegue grande",
+      "precio_venta_prod": 7,
+      "precio_compra_prod": 5,
+      "foto_prod": "./src/img-productos/prod002.jpg",
+      "cantidad_prod": 100
+    },
+    {
+      "cod_prod": "P00003",
+      "nombre_prod": "Colores Faber Castell Grandes de 12 u.",
+      "nombre_comun_prod": "Colores Grandes de 12 u.",
+      "descripcion_prod": "Colores Grandes con 12 unidades",
+      "precio_venta_prod": 20,
+      "precio_compra_prod": 17,
+      "foto_prod": "./src/img-productos/prod003.jpeg",
+      "cantidad_prod": 100
+    },
+    {
+      "cod_prod": "P00004",
+      "nombre_prod": "Tajador de plástico",
+      "nombre_comun_prod": "Tajador o sacapunta",
+      "descripcion_prod": "Tajador de plástico",
+      "precio_venta_prod": 1,
+      "precio_compra_prod": 0.5,
+      "foto_prod": "./src/img-productos/prod004.jpg",
+      "cantidad_prod": 100
+    },
+    {
+      "cod_prod": "P00005",
+      "nombre_prod": "Borrador miga de pan",
+      "nombre_comun_prod": "Borrador miga de pan",
+      "descripcion_prod": "Borrador miga de pan",
+      "precio_venta_prod": 4,
+      "precio_compra_prod": 3,
+      "foto_prod": "./src/img-productos/prod005.jpg",
+      "cantidad_prod": 100
+    }
+  ]
